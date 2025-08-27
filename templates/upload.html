@@ -1,0 +1,209 @@
+<!-- templates/upload.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Zeshare | Creator Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f6fa;
+      color: #333;
+      padding: 2rem;
+    }
+
+    h1, h2 {
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      color: #2c3e50;
+    }
+
+    h2 {
+      font-size: 1.3rem;
+      color: #34495e;
+    }
+
+    .flash-messages {
+      list-style: none;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      border-radius: 8px;
+      background: #ffecec;
+      color: #b30000;
+    }
+
+    .upload-form {
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      margin-bottom: 2rem;
+      max-width: 600px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    label {
+      font-weight: 500;
+      font-size: 0.95rem;
+      color: #555;
+    }
+
+    input, select, button {
+      padding: 0.7rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: #2980b9;
+      box-shadow: 0 0 0 2px rgba(41, 128, 185, 0.2);
+    }
+
+    button {
+      background: #2980b9;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    button:hover {
+      background: #1f6391;
+      transform: translateY(-2px);
+    }
+
+    .uploaded-videos {
+      max-width: 1000px;
+    }
+
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .video-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.2s;
+    }
+
+    .video-card:hover {
+      transform: translateY(-4px);
+    }
+
+    video {
+      width: 100%;
+      border-radius: 8px;
+      margin-bottom: 0.8rem;
+    }
+
+    .video-info {
+      text-align: left;
+      width: 100%;
+    }
+
+    .video-info h3 {
+      margin: 0 0 0.4rem;
+      font-size: 1.05rem;
+      color: #2c3e50;
+    }
+
+    .video-info p {
+      margin: 0.2rem 0;
+      font-size: 0.9rem;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h1>Creator Dashboard</h1>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul class="flash-messages">
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  <section class="upload-form">
+    <h2>Upload New Video</h2>
+    <form method="POST" action="{{ url_for('upload_video') }}" enctype="multipart/form-data">
+      <label>Title:</label>
+      <input type="text" name="title" required>
+
+      <label>Publisher:</label>
+      <input type="text" name="publisher" required>
+
+      <label>Producer:</label>
+      <input type="text" name="producer">
+
+      <label>Genre:</label>
+      <input type="text" name="genre">
+
+      <label>Age Rating:</label>
+      <select name="age_rating" required>
+        <option value="">-- Select --</option>
+        <option value="G">G</option>
+        <option value="PG">PG</option>
+        <option value="12">12</option>
+        <option value="15">15</option>
+        <option value="18">18</option>
+      </select>
+
+      <!-- <label>Video URL (optional):</label>
+      <input type="url" name="url" placeholder="https://example.com/video.mp4"> -->
+
+      <label>Or Upload File:</label>
+      <input type="file" name="file" accept="video/*">
+
+      <button type="submit">Upload</button>
+    </form>
+  </section>
+
+  <section class="uploaded-videos">
+    <h2>Your Uploaded Videos</h2>
+    {% if videos %}
+      <div class="video-grid">
+        {% for video in videos %}
+          <div class="video-card">
+            <video controls>
+              <source src="{{ video.url }}" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+            <div class="video-info">
+              <h3>{{ video.title }}</h3>
+              <p><strong>Genre:</strong> {{ video.genre }}</p>
+              <p><strong>Rating:</strong> {{ video.age_rating }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p>You haven't uploaded any videos yet.</p>
+    {% endif %}
+  </section>
+</body>
+</html>

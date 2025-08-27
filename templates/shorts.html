@@ -1,0 +1,153 @@
+<!-- templates/shorts.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Zeshare | Shorts</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: #111;
+      color: #eee;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+
+    h1 {
+      color: #ff9800;
+      margin-bottom: 2rem;
+    }
+
+    .shorts-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      width: 100%;
+      max-width: 1200px;
+    }
+
+    .shorts-item {
+      background: #222;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+      transition: transform 0.3s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .shorts-item:hover {
+      transform: translateY(-6px);
+    }
+
+    .shorts-full-video {
+      width: 100%;
+      aspect-ratio: 9 / 16;
+      object-fit: cover;
+      border-bottom: 2px solid #333;
+    }
+
+    .shorts-meta {
+      padding: 1rem;
+    }
+
+    .shorts-meta h3 {
+      margin: 0;
+      font-size: 1.1rem;
+      color: #ffcc80;
+    }
+
+    .shorts-meta p {
+      margin: 0.3rem 0 0;
+      font-size: 0.85rem;
+      color: #aaa;
+    }
+
+    .shorts-actions {
+      display: flex;
+      justify-content: space-around;
+      padding: 0.8rem 1rem 1.2rem;
+      background: #1a1a1a;
+      border-top: 1px solid #333;
+    }
+
+    .shorts-actions button,
+    .shorts-actions a {
+      background: none;
+      border: none;
+      color: #ff9800;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: transform 0.2s, color 0.2s;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .shorts-actions button:hover,
+    .shorts-actions a:hover {
+      color: #fff;
+      transform: scale(1.1);
+    }
+
+    .like-count,
+    .comment-link {
+      font-size: 0.9rem;
+    }
+
+    .comment-link {
+      color: #ff9800;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔥 Shorts Feed</h1>
+
+  <div class="shorts-container">
+    {% for video in videos %}
+      <div class="shorts-item">
+        <a href="{{ url_for('watch', video_id=video['id']) }}">
+          <video class="shorts-full-video" autoplay loop muted playsinline>
+            <source src="{{ video['url'] }}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </a>
+        <div class="shorts-meta">
+          <h3>{{ video['title'] }}</h3>
+          <p>{{ video['publisher'] }} • {{ video['genre'] or "N/A" }} • Rated: {{ video['age_rating'] or "N/A" }}</p>
+        </div>
+        <div class="shorts-actions">
+          <form method="POST" action="{{ url_for('like') }}" class="like-form" data-video-id="{{ video['id'] }}">
+            <button type="button" class="like-btn" data-liked="false">Like <span class="like-count">{{ video['like_count'] }}</span></button>
+          </form>
+          <a href="{{ url_for('watch', video_id=video['id']) }}" class="comment-link">comments{{ video['comment_count'] }}</a>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <script>
+    document.querySelectorAll('.like-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const form = btn.closest('.like-form');
+        const videoId = form.dataset.videoId;
+        const liked = btn.dataset.liked === 'true';
+        const res = await fetch("{{ url_for('like') }}", {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: `video_id=${videoId}&liked=${!liked}`
+        });
+        const data = await res.json();
+        if (data.success) {
+          btn.querySelector('.like-count').textContent = data.like_count;
+          btn.dataset.liked = (!liked).toString();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
