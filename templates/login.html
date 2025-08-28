@@ -1,146 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Zeshare | Login</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="{{ url_for('static', filename='styles/style.css') }}" rel="stylesheet">
-    <style>
-      /* General reset and base styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-.auth-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f4f9;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Container for the form */
-.auth-container {
-    background-color: #ffffff;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-}
-
-/* Heading */
-.auth-container h2 {
-    margin-bottom: 1.5rem;
-    color: #333;
-    font-size: 1.8rem;
-    font-weight: 600;
-}
-
-/* Form inputs and select */
-.auth-container input[type="text"],
-.auth-container input[type="password"],
-.auth-container select {
-    width: 100%;
-    padding: 0.75rem;
-    margin-bottom: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
-}
-
-.auth-container input:focus,
-.auth-container select:focus {
-    outline: none;
-    border-color: #E50914;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
-}
-
-/* Placeholder styling */
-.auth-container input::placeholder {
-    color: #999;
-}
-
-/* Button */
-.btn-primary {
-    width: 100%;
-    padding: 0.75rem;
-    background-color: #E50914;
-    border: none;
-    border-radius: 4px;
-    color: #fff;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.btn-primary:hover {
-    background-color: #E50914;
-}
-
-/* Link styling */
-.auth-container p {
-    margin-top: 1rem;
-    color: #555;
-    font-size: 0.9rem;
-}
-
-.auth-container a {
-    color: #007bff;
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.auth-container a:hover {
-    text-decoration: underline;
-}
-
-/* Responsive design */
-@media (max-width: 480px) {
-    .auth-container {
-        padding: 1.5rem;
-        margin: 1rem;
-    }
-
-    .auth-container h2 {
-        font-size: 1.5rem;
-    }
-}
-    </style>
-</head>
-<body class="auth-body">
-    <div class="auth-container">
-        <h1>Welcome Back</h1>
-        <div class="nav-links">
-            <a href="{{ url_for('index') }}">Home</a>
-            <a href="{{ url_for('register') }}">Register</a>
+{% extends "base.html" %}
+{% block title %}shortvideosharingapp | Login{% endblock %}
+{% block content %}
+<div class="auth-container">
+    <h2>Welcome Back</h2>
+    <form method="POST">
+        <div>
+            <label>Username</label>
+            <input type="text" name="username" required>
         </div>
-        <form method="POST">
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    <ul class="flash-messages">
-                        {% for message in messages %}
-                            <li>{{ message }}</li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-            {% endwith %}
-            <div>
-                <label>Username</label>
-                <input type="text" name="username" required>
-            </div>
-            <div>
-                <label>Password</label>
-                <input type="password" name="password" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Log In</button>
-        </form>
-    </div>
-</body>
-</html>
+        <div>
+            <label>Password</label>
+            <input type="password" name="password" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Log In</button>
+    </form>
+</div>
+{% endblock %}

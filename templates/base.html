@@ -2,102 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Zeshare{% endblock %}</title>
+    <title>{% block title %}shortvideosharingapp{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
-    <style>
-        body {
-            margin: 0;
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-            background: #f4f4f4;
-            color: #333;
-        }
-
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.8rem 2rem;
-            background: #111;
-            color: #fff;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .navbar .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #e50914; /* Netflix red vibe */
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .navbar nav {
-            display: flex;
-            gap: 1.2rem;
-            align-items: center;
-        }
-
-        .navbar nav a {
-            color: #ddd;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.2s;
-        }
-
-        .navbar nav a:hover {
-            color: #fff;
-        }
-
-        .navbar .user {
-            background: #e50914;
-            color: #fff;
-            padding: 0.3rem 0.7rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: bold;
-        }
-
-        .btn {
-            background: #e50914;
-            color: #fff;
-            padding: 0.4rem 0.9rem;
-            border-radius: 6px;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-
-        .btn:hover {
-            background: #b20710;
-        }
-
-        .flash-messages {
-            list-style: none;
-            padding: 0.5rem 1rem;
-            margin: 0;
-            background: #fffae6;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .flash-messages li {
-            margin: 0.2rem 0;
-            color: #333;
-        }
-
-        .content {
-            padding: 2rem;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-    </style>
 </head>
 <body>
     <header class="navbar">
-        <div class="logo">Zeshare</div>
+        <div class="logo">shortvideosharingapp</div>
         <nav>
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('shorts') }}">Shorts</a>
             {% if 'user' in session %}
-                <a href="{{ url_for('shorts') }}">Shorts</a>
+                <a href="{{ url_for('profile') }}">Profile</a>
                 {% if session['user']['role'] == 'creator' %}
                     <a href="{{ url_for('dashboard') }}">Dashboard</a>
                 {% endif %}

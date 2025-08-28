@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% block title %}Shorts | Zeshare{% endblock %}
+{% block title %}Shorts | shortvideosharingapp{% endblock %}
 {% block content %}
-<h1>Feed</h1>
+<h1>Your Feed</h1>
 <div class="shorts-list">
     {% for video in videos %}
         <div class="shorts-card">
@@ -14,7 +14,7 @@
             <div class="shorts-details">
                 <h3>{{ video['title'] }}</h3>
                 <p class="shorts-meta">
-                    <span>{{ video['publisher'] }}</span> • 
+                    <span>By {{ video['publisher'] }}</span> • 
                     <span>{{ video['genre'] or "N/A" }}</span> • 
                     <span>Rated: {{ video['age_rating'] or "N/A" }}</span>
                 </p>
@@ -34,6 +34,8 @@
                 </div>
             </div>
         </div>
+    {% else %}
+        <p>No shorts available yet.</p>
     {% endfor %}
 </div>
 <script>
